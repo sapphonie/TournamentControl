@@ -16,7 +16,7 @@
 #define PLUGIN_NAME         "[TF2] Tournament Control"
 #define PLUGIN_AUTHOR       "stephanie"
 #define PLUGIN_DESC         "Allows server admins to control tournament variables, like team readystate and team name."
-#define PLUGIN_VERSION      "0.0.1"
+#define PLUGIN_VERSION      "0.0.2"
 #define PLUGIN_CONTACT      "https://steph.anie.dev/"
 
 #define UPDATE_URL          "https://raw.githubusercontent.com/stephanieLGBT/TournamentControl/master/updatefile.txt"
@@ -46,8 +46,6 @@ public OnPluginStart()
     RegAdminCmd("sm_renameteam", ForceRename, ADMFLAG_SLAY, "Force team name change in tournament mode.\nUsage: sm_renameteam <red/blu/all> <teamname>\nTeam names must be 6 chars or less!");
     RegAdminCmd("sm_renameteams", ForceRename, ADMFLAG_SLAY, "Force team name change in tournament mode.\nUsage: sm_renameteam <red/blu/all> <teamname>\nTeam names must be 6 chars or less!");
     // resets ready states on lateload
-    GameRules_SetProp("m_bAwaitingReadyRestart", 1);
-    GameRules_SetPropFloat("m_flRestartRoundTime", -1.0);
     ServerCommand("mp_tournament_restart");
     //CreateTimer(0.5, SpewInfo, _, TIMER_REPEAT); // debug
 }
