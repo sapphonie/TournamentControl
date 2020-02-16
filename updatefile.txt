@@ -1,0 +1,18 @@
+"Updater"
+{
+    "Information"
+    {
+        "Version"
+        {
+            "Latest"    "0.0.1"
+        }
+
+        "Notes" "Changes in 0.0.1:"
+        "Notes" "- Init"
+    }
+
+    "Files"
+    {
+        "Plugin"    "Path_SM/plugins/tournamentcontrol.smx"
+    }
+}
