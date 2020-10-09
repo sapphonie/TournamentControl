@@ -4,11 +4,11 @@
     {
         "Version"
         {
-            "Latest"    "0.0.2"
+            "Latest"    "0.0.3"
         }
 
-        "Notes" "Changes in 0.0.2:"
-        "Notes" "- Fixed issue with GameRules_SetProp on plugin load"
+        "Notes" "Changes in 0.0.3:"
+        "Notes" "- update to trans/1.10 syntax"
     }
 
     "Files"

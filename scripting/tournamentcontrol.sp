@@ -1,4 +1,5 @@
 #pragma semicolon 1
+#pragma newdecls required
 
 #include <sourcemod>
 #include <color_literals>
@@ -7,6 +8,7 @@
 #undef REQUIRE_PLUGIN
 #include <updater>
 
+// what
 #define NO  0
 #define YES 1
 #define RED 2
@@ -16,14 +18,14 @@
 #define PLUGIN_NAME         "[TF2] Tournament Control"
 #define PLUGIN_AUTHOR       "stephanie"
 #define PLUGIN_DESC         "Allows server admins to control tournament variables, like team readystate and team name."
-#define PLUGIN_VERSION      "0.0.2"
+#define PLUGIN_VERSION      "0.0.3"
 #define PLUGIN_CONTACT      "https://steph.anie.dev/"
 
-#define UPDATE_URL          "https://raw.githubusercontent.com/stephanieLGBT/TournamentControl/master/updatefile.txt"
+#define UPDATE_URL          "https://raw.githubusercontent.com/sapphonie/TournamentControl/master/updatefile.txt"
 
-Handle:g_hNoRace;
+Handle g_hNoRace;
 
-public Plugin:myinfo =
+public Plugin myinfo =
 {
     name                    = PLUGIN_NAME,
     author                  = PLUGIN_AUTHOR,
@@ -39,7 +41,7 @@ public Plugin:myinfo =
  * When the plugin starts up.
  * -------------------------------------------------------------------------- */
 
-public OnPluginStart()
+public void OnPluginStart()
 {
     RegAdminCmd("sm_rup", ForceRupState, ADMFLAG_SLAY, "Force ready up team in tournament mode.\nUsage: sm_rup <red/blu/all>");
     RegAdminCmd("sm_unrup", ForceRupState, ADMFLAG_SLAY, "Force un ready up teams in tournament mode.\nUsage: sm_unrup <red/blu/all>");
@@ -50,7 +52,7 @@ public OnPluginStart()
     //CreateTimer(0.5, SpewInfo, _, TIMER_REPEAT); // debug
 }
 
-public OnLibraryAdded(const String:libname[])
+public void OnLibraryAdded(const char[] libname)
 {
     if (StrEqual(libname, "updater"))
     {
@@ -58,7 +60,7 @@ public OnLibraryAdded(const String:libname[])
     }
 }
 
-public Action ForceRename (int client, int args)
+public Action ForceRename(int client, int args)
 {
     if (GameRules_GetProp("m_iRoundState") == 1 || GameRules_GetProp("m_iRoundState") == 3)
     {
@@ -66,7 +68,7 @@ public Action ForceRename (int client, int args)
         return Plugin_Handled;
     }
     // handle for sending events
-    new Handle:g_eTourney = CreateEvent("tournament_stateupdate", true);
+    Handle g_eTourney = CreateEvent("tournament_stateupdate", true);
     // get args from trigger/sm command
     char arg1[32];
     char arg2[8];
@@ -110,7 +112,7 @@ public Action ForceRename (int client, int args)
         {
             SetConVarString(FindConVar("mp_tournament_redteamname"), arg2);
             FireEvent(g_eTourney);
-            Handle:g_eTourney = CreateEvent("tournament_stateupdate", true);
+            g_eTourney = CreateEvent("tournament_stateupdate", true);
             // firing the event means we have to reset the handle
             // and set all the event info again
             SetConVarString(FindConVar("mp_tournament_blueteamname"), arg2);
@@ -126,7 +128,7 @@ public Action ForceRename (int client, int args)
     return Plugin_Handled;
 }
 
-public Action ForceRupState (int client, int args)
+public Action ForceRupState(int client, int args)
 {
     if (GameRules_GetProp("m_iRoundState") == 1 || GameRules_GetProp("m_iRoundState") == 3)
     {
@@ -134,17 +136,17 @@ public Action ForceRupState (int client, int args)
         return Plugin_Handled;
     }
     // handle for sending events
-    new Handle:g_eTourney = CreateEvent("tournament_stateupdate", true);
+    Handle g_eTourney = CreateEvent("tournament_stateupdate", true);
     // team color intbool
-    new team;
+    int team;
     // rup state intbool
-    new readystate;
+    int readystate;
     // get args from trigger/sm command
     char arg0[32];
     char arg1[32];
     // teamstate int
-    new redstate;
-    new bluestate;
+    int redstate;
+    int bluestate;
 
     GetCmdArg(0, arg0, sizeof(arg0));
     GetCmdArg(1, arg1, sizeof(arg1));
@@ -210,7 +212,7 @@ public Action ForceRupState (int client, int args)
             FireEvent(g_eTourney);
             GameRules_SetProp("m_bTeamReady", readystate, .element=RED);
             // firing the event means we have to reset the handle and set all the event info again
-            Handle:g_eTourney = CreateEvent("tournament_stateupdate", true);
+            g_eTourney = CreateEvent("tournament_stateupdate", true);
             SetEventInt(g_eTourney, "readystate", readystate);
             SetEventInt(g_eTourney, "userid", client);
             SetEventBool(g_eTourney, "namechange", false);
